@@ -1,26 +1,39 @@
 ﻿namespace LinkedIn.Jobs
 
 (* Pretend the files are stored in the following structure:
-
 +---dk
 |   +---2016-05-31
 |   |   +---java
-|   |   +---software
-|   |   +---tester
-|   |   \---udvikler
-|   +---2016-06-01
-|       +---java
-|       +---software
-|       \---udvikler
+|   |   |       job_1234.json
+|   |   |       job_1235.json
+|   |   |
+|   |   \---software
+|   |           job_1234.json
+|   |           job_1335.json
+|   |
+|   \---2016-06-01
+|       \---java
+|              job_1234.json
+|
 \---ma
     +---2016-05-31
     |   +---java
-    |   +---software
-    |   \---tester
-    +---2016-06-01
+    |   |       job_1234.json
+    |   |       job_1435.json
+    |   |
+    |   \---software
+    |           job_1234.json
+    |           job_1235.json
+    |
+    \---2016-06-01
         +---java
-        +---software
-        \---tester
+        |       job_1234.json
+        |       job_1535.json
+        |
+        \---software
+                job_1634.json
+
+
 *)
 module Loader = 
     open System
