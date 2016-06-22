@@ -9,18 +9,18 @@ open LinkedIn.Jobs.Loader
 open System.Text.RegularExpressions
 
 type Job = JsonProvider< "samples/job.json" >
+
 type Jobs = JsonProvider< "samples/jobs.json" >
 
 let root = @"c:\temp\linkedin-jobs\"
 let path file = System.IO.Path.Combine(root, file)
 let [| dump; collected; normalized; csv |] = [| "dump.json"; "collected.json"; "normalized.json"; "final.csv" |] |> Array.map path
 
-
 Loader.create dir
-|> extract (fun state country -> { state with country = country; path = cd state.path country }) 
-|> Array.collect (extract (fun state date -> { state with date = date; path = cd state.path date }) )
-|> Array.collect (extract (fun state kw -> { state with keyword = kw; path = cd state.path kw }) )
-|> Array.collect (files  (fun state file -> { state with file = file; path = cd state.path file }))
+|> extract country
+|> Array.collect (extract date)
+|> Array.collect (extract keyword)
+|> Array.collect (files file)
 |> Array.filter isJobFile
 |> Array.sortBy byDate
 |> Array.rev
@@ -29,7 +29,10 @@ Loader.create dir
 |> join
 |> write dump
 
-let jobs =  Loader.create dump|> openFile|> fun c-> Jobs.Parse c.data
+let jobs = 
+    Loader.create dump
+    |> openFile
+    |> fun c -> Jobs.Parse c.data
 
 type JobDta = 
     { id : int

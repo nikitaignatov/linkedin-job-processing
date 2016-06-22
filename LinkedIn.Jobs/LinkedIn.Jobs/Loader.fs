@@ -61,3 +61,11 @@ module Loader =
     let isJobFile (s : T) = Regex.IsMatch(s.file, "^job_\d+.json$")
     let byJobId (s : T) = Regex.Replace(s.file, "^job_(\d+).json$", "$1")
     let byDate (s : T) = Regex.Replace(s.date, @".*(\d+-\d+-\d+)\.*$", "$1")
+
+    // TODO claenup
+    let path    s x =      { s with path    = cd s.path x }
+    let country s x = path { s with country = x } x
+    let keyword s x = path { s with keyword = x } x
+    let file    s x = path { s with file    = x } x
+    let data    s x = path { s with data    = x } x
+    let date    s x = path { s with date    = x } x
