@@ -58,7 +58,7 @@ module Loader =
     
     let dir = @"c:\temp\linkedin-jobs\dump\"
     let get dir = Directory.GetDirectories dir
-    let someNames (dir : string) = dir.Split '\\' |> Array.tryLast
+    let someNames (dir : string) = dir.Split '/' |> Array.tryLast
     
     let extract (map : T -> string -> T) (state : T) = 
         get state.path
@@ -67,7 +67,7 @@ module Loader =
         |> Array.map (map state)
     
     let cd dir next = Path.Combine(dir, next)
-    let files map (s : T) = Directory.GetFiles s.path |> Array.map (map s)
+    let files map (s : T) = Directory.GetFiles s.path |> Array.map Path.GetFileName |> Array.map (map s)
     let openFile (s : T) = { s with data = File.ReadAllText s.path }
     let write path data = File.WriteAllText(path, data)
     let join (ary : T array) = sprintf "[%s]" (System.String.Join(",\n", ary |> Array.map (fun c -> c.data)))
