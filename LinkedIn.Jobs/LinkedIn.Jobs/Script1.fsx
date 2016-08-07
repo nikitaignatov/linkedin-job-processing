@@ -34,36 +34,24 @@ let jobs =
     |> openFile
     |> fun c -> Jobs.Parse c.data
 
-type JobDta = 
-    { id : int
-      company_name : string
-      description : string
-      views : int option
-      applicants : int }
+let summary (f : 'a -> int option) = 
+    jobs
+    |> Array.map f
+    |> Array.choose id
+    |> Array.sum
 
-jobs |> Array.map (fun x -> 
-            { id = x.Id
-              company_name = x.Company.Name
-              description = x.Description
-              views = x.Views
-              applicants = x.Applicants })
-//
-//let summary (f : 'a -> int option) = 
-//    jobs
-//    |> Array.map f
-//    |> Array.choose id
-//    |> Array.sum
-//
-//let sort (f : 'a -> 'b) = jobs |> Array.sortBy f
-//let sortDesc (f : 'a -> 'b) = jobs |> Array.sortByDescending f
-//
-//sortDesc (fun c -> c.Applicants)
-//|> Array.take 10
-//|> Array.map (fun c -> c.Company.Name, c.Day, c.Views, c.Applicants)
-//summary (fun c -> c.Views)
-//summary (fun c -> c.Applicants)
-//jobs
-//|> Array.distinctBy (fun c -> c.Id)
-//|> Array.length
-//
-//let doc = job.Parse("")
+let sort (f : 'a -> 'b) = jobs |> Array.sortBy f
+let sortDesc (f : 'a -> 'b) = jobs |> Array.sortByDescending f
+
+// top 10 jobs with most applications
+let top = 
+    sortDesc (fun c -> c.Applicants)
+    |> Array.take 10
+    |> Array.map (fun c -> c.Company.Name, c.Day, c.Views, c.Applicants)
+
+summary (fun c -> c.Views)
+//summary (fun c -> int c.Applicants)
+jobs
+|> Array.distinctBy (fun c -> c.Id)
+|> Array.length
+
